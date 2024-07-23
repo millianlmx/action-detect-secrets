@@ -20,6 +20,8 @@ fi
 
 detect-secrets audit /tmp/.secrets.baseline --report > /tmp/.secrets.audit
 
+ls -al /tmp/
+
 if [ "${INPUT_SKIP_AUDITED}" = "true" ]; then
     SKIP_AUDITED_FLAG="--skip-audited"
 fi
