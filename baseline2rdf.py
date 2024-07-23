@@ -3,6 +3,13 @@
 import sys
 import json
 import argparse
+from transformers import pipeline
+from huggingface_hub import login
+import os
+
+token = os.environ["HUGGINGFACE_TOKEN"]
+
+login(token=token)
 
 rdjson = {
     'source': {
@@ -19,6 +26,13 @@ def main(skip_audited: bool = False, verbose: bool = False):
     if not baseline['results']:
         baseline['results'] = {}
 
+    audit = json.load("/tmp/.secrets.audit")
+    if not audit['results']:
+        audit['results'] = {}
+
+    # Use a pipeline as a high-level helper
+    pipe = pipeline("text-classification", model="adeoservicesai/BERT_secret_classification")
+
     results = {}
     for detects in baseline['results'].values():
         for item in detects:
@@ -26,21 +40,24 @@ def main(skip_audited: bool = False, verbose: bool = False):
                 if verbose:
                     print('Skipping verified secret in : %s' % item['filename'])
             else:
-                key = '%s:%s' % (item['filename'], item['line_number'])
-                if key in results:
-                    results[key]['message'] += '\n* ' + item['type']
-                else:
-                    results[key] = {
-                        'message': '\n* ' + item['type'],
-                        'location': {
-                            'path': item['filename'],
-                            'range': {
-                                'start': {
-                                    'line': item['line_number']
+                for audit in audit['results'].values():
+                    if audit['filename'] == item['filename'] and item['line_number'] in audit['lines'].keys():
+                        if pipe(audit['lines'][item['line_number']])[0]['label'] == 'SECRET':
+                            key = '%s:%s' % (item['filename'], item['line_number'])
+                            if key in results:
+                                results[key]['message'] += '\n* ' + item['type']
+                            else:
+                                results[key] = {
+                                    'message': '\n* ' + item['type'],
+                                    'location': {
+                                        'path': item['filename'],
+                                        'range': {
+                                            'start': {
+                                                'line': item['line_number']
+                                            }
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }
 
     for result in results.values():
         rdjson['diagnostics'].append(result)

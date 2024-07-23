@@ -18,6 +18,8 @@ fi
 
 if [ "${INPUT_SKIP_AUDITED}" = "true" ]; then
     SKIP_AUDITED_FLAG="--skip-audited"
+else
+    detect-secrets audit /tmp/.secrets.baseline --report > /tmp/.secrets.audit
 fi
 if [ "${INPUT_VERBOSE}" = "true" ]; then
     VERBOSE_FLAG="--verbose"
