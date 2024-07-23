@@ -16,6 +16,8 @@ else
     /usr/local/bin/detect-secrets scan ${INPUT_DETECT_SECRETS_FLAGS} ${INPUT_WORKDIR} > /tmp/.secrets.baseline
 fi
 
+ls -l /tmp/
+
 detect-secrets audit /tmp/.secrets.baseline --report > /tmp/.secrets.audit
 
 if [ "${INPUT_SKIP_AUDITED}" = "true" ]; then
