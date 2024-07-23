@@ -8,6 +8,8 @@ on:
 jobs:
   detect-secrets:
     runs-on: ubuntu-latest
+    env:
+      HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
     steps:
     - uses: actions/checkout@v4
     - name: detect-secrets

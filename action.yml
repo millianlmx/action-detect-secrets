@@ -1,7 +1,5 @@
 name: Run detect-secrets with reviewdog
 description: 🐶 Run detect-secrets with reviewdog on pull requests to improve code review experience.
-env:
-  HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
 inputs:
   github_token:
     description: GITHUB_TOKEN
