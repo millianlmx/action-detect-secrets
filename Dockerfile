@@ -9,8 +9,9 @@ RUN set -eux \
         wget \
     && wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION} \
     && pip install detect-secrets[word_list] \
-    && pip install transformers
-
+    && pip install transformers \
+    && pip install torch 
+    
 COPY baseline2rdf.py /usr/local/bin/baseline2rdf
 COPY entrypoint.sh /entrypoint.sh
 
