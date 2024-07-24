@@ -67,7 +67,7 @@ def main(skip_audited: bool = False, verbose: bool = False):
         try:
             sys.stdout.write(json.dumps(rdjson, indent=2, ensure_ascii=False))
             sys.stdout.write('\n')
-        except Exception as error:
+        except BrokenPipeError as error:
             sys.stderr.write('Error: %s\n' % error)
             return 1
         return 0

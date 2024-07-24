@@ -31,8 +31,8 @@ if [ "${INPUT_VERBOSE}" = "true" ]; then
     VERBOSE_FLAG="--verbose"
 fi
 
-cat /tmp/.secrets.baseline | baseline2rdf ${SKIP_AUDITED_FLAG} ${VERBOSE_FLAG} \
-    | reviewdog -f=rdjson \
+cat /tmp/.secrets.baseline | baseline2rdf ${SKIP_AUDITED_FLAG} ${VERBOSE_FLAG} > /tmp/.secrets.rdf
+cat /tmp/.secrets.rdf | reviewdog -f=rdjson \
         -name="${INPUT_NAME:-detect-secrets}" \
         -filter-mode="${INPUT_FILTER_MODE:-added}" \
         -reporter="${INPUT_REPORTER:-github-pr-check}" \
