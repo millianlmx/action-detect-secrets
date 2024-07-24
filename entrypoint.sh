@@ -31,7 +31,7 @@ if [ "${INPUT_VERBOSE}" = "true" ]; then
     VERBOSE_FLAG="--verbose"
 fi
 
-cat /tmp/.secrets.baseline | baseline2rdf ${SKIP_AUDITED_FLAG} ${VERBOSE_FLAG} > /tmp/.secrets.rdf
+cat /tmp/.secrets.baseline | baseline2rdf ${SKIP_AUDITED_FLAG} ${VERBOSE_FLAG}
 cat /tmp/.secrets.rdf
 cat /tmp/.secrets.rdf | reviewdog -f=rdjson \
         -name="${INPUT_NAME:-detect-secrets}" \

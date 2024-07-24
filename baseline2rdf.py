@@ -61,15 +61,16 @@ def main(skip_audited: bool = False, verbose: bool = False):
                                         }
                                     }
 
+        print(results)
+
         for result in results.values():
             rdjson['diagnostics'].append(result)
 
-        try:
-            sys.stdout.write(json.dumps(rdjson, indent=2, ensure_ascii=False))
-            sys.stdout.write('\n')
-        except BrokenPipeError as error:
-            sys.stderr.write('Error: %s\n' % error)
-            return 1
+        with open("/tmp/.secrets.rdf", "w") as rdf_file:
+            rdf_file.write(json.dumps(rdjson, indent=2, ensure_ascii=False))
+            rdf_file.close()
+
+        audit_file.close()
         return 0
 
 
