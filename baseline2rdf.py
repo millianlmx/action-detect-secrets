@@ -27,12 +27,12 @@ def main(skip_audited: bool = False, verbose: bool = False):
         baseline['results'] = {}
 
     with open("/tmp/.secrets.audit", "r") as audit_file:
-        audit = json.load(audit_file)
+        audit_data = json.load(audit_file)
     
-        print(audit)
+        print(audit_data)
 
-        if not audit['results']:
-            audit['results'] = {}
+        if not audit_data['results']:
+            audit_data['results'] = {}
 
         # Use a pipeline as a high-level helper
         pipe = pipeline("text-classification", model="adeoservicesai/BERT_secret_classification")
@@ -44,7 +44,7 @@ def main(skip_audited: bool = False, verbose: bool = False):
                     if verbose:
                         print('Skipping verified secret in : %s' % item['filename'])
                 else:
-                    for audit in audit['results']:
+                    for audit in audit_data['results']:
                         if audit['filename'] == item['filename'] and item['line_number'] in audit['lines'].keys():
                             if pipe(audit['lines'][item['line_number']])[0]['label'] == 'SECRET':
                                 key = '%s:%s' % (item['filename'], item['line_number'])
