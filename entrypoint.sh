@@ -6,6 +6,8 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 detect-secrets --version
 
+echo "$HUGGINGFACE_TOKEN"
+
 git config --global --add safe.directory /github/workspace
 
 if [ -n "${INPUT_BASELINE_PATH}" ]; then
