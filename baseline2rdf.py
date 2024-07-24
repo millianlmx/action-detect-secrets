@@ -43,11 +43,6 @@ def main(skip_audited: bool = False, verbose: bool = False):
                         print('Skipping verified secret in : %s' % item['filename'])
                 else:
                     for audit in audit_data['results']:
-                        print(audit['filename'] == item['filename'] and str(item['line_number']) in list(audit['lines'].keys()))
-                        print(audit['filename'])
-                        print(item['filename'])
-                        print(item['line_number'])
-                        print(audit['lines'].keys())
                         if audit['filename'] == item['filename'] and str(item['line_number']) in list(audit['lines'].keys()):
                             print(pipe(audit['lines'][str(item['line_number'])]))
                             if pipe(audit['lines'][str(item['line_number'])])[0]['label'] == 'LABEL_1':
