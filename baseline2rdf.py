@@ -6,6 +6,7 @@ import argparse
 from transformers import pipeline
 from huggingface_hub import login
 import os
+from tqdm import tqdm
 
 token = os.environ["HUGGINGFACE_TOKEN"]
 
@@ -38,13 +39,14 @@ def main(skip_audited: bool = False, verbose: bool = False):
         pipe = pipeline("text-classification", model="adeoservicesai/BERT_secret_classification")
 
         results = {}
-        for detects in baseline['results'].values():
+        for detects in tqdm(baseline['results'].values()):
             for item in detects:
                 if skip_audited and 'is_secret' in item and not item['is_secret']:
                     if verbose:
                         print('Skipping verified secret in : %s' % item['filename'])
                 else:
                     for audit in audit_data['results']:
+                        print(audit)
                         if audit['filename'] == item['filename'] and item['line_number'] in audit['lines'].keys():
                             if pipe(audit['lines'][item['line_number']])[0]['label'] == 'SECRET':
                                 key = '%s:%s' % (item['filename'], item['line_number'])
