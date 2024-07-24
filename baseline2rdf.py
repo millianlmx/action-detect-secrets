@@ -50,7 +50,7 @@ def main(skip_audited: bool = False, verbose: bool = False):
                         print(audit['lines'].keys())
                         if audit['filename'] == item['filename'] and str(item['line_number']) in list(audit['lines'].keys()):
                             print(pipe(audit['lines'][str(item['line_number'])]))
-                            if pipe(audit['lines'][str(item['line_number'])])[0]['label'] == 'SECRET':
+                            if pipe(audit['lines'][str(item['line_number'])])[0]['label'] == 'LABEL_1':
                                 key = '%s:%s' % (item['filename'], item['line_number'])
                                 if key in results:
                                     results[key]['message'] += '\n* ' + item['type']
