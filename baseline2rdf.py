@@ -28,8 +28,6 @@ def main(skip_audited: bool = False, verbose: bool = False):
 
     with open("/tmp/.secrets.audit", "r") as audit_file:
         audit_data = json.load(audit_file)
-    
-        print(audit_data)
 
         if not audit_data['results']:
             audit_data['results'] = {}
@@ -45,7 +43,6 @@ def main(skip_audited: bool = False, verbose: bool = False):
                         print('Skipping verified secret in : %s' % item['filename'])
                 else:
                     for audit in audit_data['results']:
-                        print(audit)
                         if audit['filename'] == item['filename'] and item['line_number'] in audit['lines'].keys():
                             if pipe(audit['lines'][item['line_number']])[0]['label'] == 'SECRET':
                                 key = '%s:%s' % (item['filename'], item['line_number'])
