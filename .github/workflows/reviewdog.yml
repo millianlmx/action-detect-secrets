@@ -3,15 +3,18 @@ name: reviewdog
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   detect-secrets:
     runs-on: ubuntu-latest
+    env:
+      HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
     steps:
     - uses: actions/checkout@v4
     - name: detect-secrets
       uses: ./
       with:
         github_token: ${{ secrets.github_token }}
-        reporter: github-pr-review
+        reporter: ${{ github.event_name == 'pull_request' && 'github-pr-review' ||  'github-check' }}
         workdir: testdata
