@@ -26,7 +26,10 @@ def main(skip_audited: bool = False, verbose: bool = False):
     if not baseline['results']:
         baseline['results'] = {}
 
-    audit = json.load("/tmp/.secrets.audit")
+    audit = None
+    with open("/tmp/.secrets.audit", "r") as audit_file:
+        audit = json.load(audit_file)
+        
     if not audit['results']:
         audit['results'] = {}
 
